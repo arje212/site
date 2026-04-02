@@ -71,19 +71,21 @@ export default function Services() {
         </div>
 
         {/* Big image banner */}
-        <div ref={imageRef} className="relative rounded-2xl overflow-hidden mb-12 h-64 md:h-80">
+        <div ref={imageRef} className="relative rounded-2xl overflow-hidden mb-12 min-h-[420px] sm:min-h-[360px] md:h-80">
           <img
             src="https://images.pexels.com/photos/3182759/pexels-photo-3182759.jpeg?auto=compress&cs=tinysrgb&w=1600"
             alt="CodeCraft team at work"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/85 via-blue-800/50 to-transparent flex items-center px-10 md:px-16">
-            <div>
-              <p className="text-blue-200 text-xs font-black uppercase tracking-[0.4em] mb-3">Based in Tanauan City, Batangas</p>
-              <h3 className="text-white font-black text-3xl md:text-4xl leading-tight max-w-lg">
-                From Your First Idea<br />to Final Deployment
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-950/90 via-blue-900/70 to-blue-900/15 flex items-end sm:items-center px-5 py-6 sm:px-8 md:px-16">
+            <div className="max-w-[18rem] sm:max-w-md md:max-w-lg">
+              <p className="text-blue-100 text-[10px] sm:text-xs font-black uppercase tracking-[0.28em] sm:tracking-[0.4em] mb-2 sm:mb-3">Based in Tanauan City, Batangas</p>
+              <h3 className="text-white font-black text-[clamp(2rem,8vw,3.5rem)] leading-[0.95] sm:leading-tight">
+                <span className="block">From Your First</span>
+                <span className="block">Idea to Final</span>
+                <span className="block">Deployment</span>
               </h3>
-              <p className="text-blue-100/70 text-sm mt-3 max-w-sm leading-relaxed">
+              <p className="text-blue-50/80 text-sm sm:text-[15px] mt-3 max-w-xs sm:max-w-sm leading-relaxed">
                 CodeCraft is your end-to-end technology partner — we handle everything so you can focus on your business.
               </p>
             </div>

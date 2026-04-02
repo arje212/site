@@ -3,6 +3,9 @@ import { Mail, Phone, MapPin, Send, ArrowRight, Clock } from 'lucide-react';
 import { supabase, type ContactSubmission } from '../lib/supabase';
 import { useScrollAnimation } from './useScrollAnimation';
 
+const CONTACT_EMAIL = 'codecraftt23@gmail.com';
+const CONTACT_PHONE = '09565983054';
+
 const services = [
   'Full-Stack Web Development',
   'Robotics & Automation',
@@ -32,14 +35,53 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+
     const fullName = `${formData.firstName} ${formData.lastName}`.trim();
+    const submissionMessage = [
+      `Service Needed: ${formData.service || 'N/A'}`,
+      `Sender Name: ${fullName || 'N/A'}`,
+      `Sender Email: ${formData.email}`,
+      '',
+      formData.message,
+    ].join('\n');
+
     try {
-      const { error } = await supabase.from('contact_submissions').insert([{
-        name: fullName,
-        email: formData.email,
-        message: `[Service: ${formData.service || 'N/A'}]\n\n${formData.message}`,
-      }]);
-      if (error) throw error;
+      const emailResponse = await fetch(`https://formsubmit.co/ajax/${CONTACT_EMAIL}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          name: fullName,
+          email: formData.email,
+          service: formData.service,
+          message: submissionMessage,
+          _subject: `New CodeCraft inquiry from ${fullName || formData.email}`,
+          _replyto: formData.email,
+          _template: 'table',
+          _captcha: 'false',
+        }),
+      });
+
+      if (!emailResponse.ok) {
+        throw new Error('Email delivery failed');
+      }
+
+      if (supabase) {
+        const { error } = await supabase.from('contact_submissions').insert([
+          {
+            name: fullName,
+            email: formData.email,
+            message: submissionMessage,
+          },
+        ]);
+
+        if (error) {
+          console.error('Failed to save contact submission to Supabase:', error);
+        }
+      }
+
       setSubmitStatus('success');
       setFormData({ name: '', email: '', message: '', service: '', firstName: '', lastName: '' });
       setTimeout(() => setSubmitStatus('idle'), 5000);
@@ -61,8 +103,6 @@ export default function Contact() {
       <div className="absolute bottom-0 left-0 w-64 h-64 bg-indigo-100/30 rounded-full blur-3xl" />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-10 relative z-10">
-
-        {/* Header */}
         <div ref={titleRef} className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div>
             <div className="flex items-center gap-3 mb-4">
@@ -79,13 +119,9 @@ export default function Contact() {
         </div>
 
         <div className="grid md:grid-cols-5 gap-6">
-
-          {/* Form */}
           <div ref={formRef} className="md:col-span-3 bg-white p-8 md:p-10 shadow-sm border border-slate-100 rounded-2xl">
             <h3 className="text-slate-900 font-black text-xs uppercase tracking-[0.3em] mb-8">Send a Message</h3>
             <form onSubmit={handleSubmit} className="space-y-5">
-
-              {/* First + Last name */}
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-slate-400 text-[10px] uppercase tracking-[0.3em] mb-2 font-bold">First Name</label>
@@ -111,7 +147,6 @@ export default function Contact() {
                 </div>
               </div>
 
-              {/* Email */}
               <div>
                 <label className="block text-slate-400 text-[10px] uppercase tracking-[0.3em] mb-2 font-bold">Email Address</label>
                 <input
@@ -125,7 +160,6 @@ export default function Contact() {
                 />
               </div>
 
-              {/* Service dropdown */}
               <div>
                 <label className="block text-slate-400 text-[10px] uppercase tracking-[0.3em] mb-2 font-bold">Service Needed</label>
                 <select
@@ -136,13 +170,14 @@ export default function Contact() {
                   className="w-full bg-slate-50 border border-slate-200 text-slate-700 px-4 py-3 text-sm focus:outline-none focus:border-blue-400 focus:bg-white transition-all rounded-xl appearance-none"
                 >
                   <option value="">Select a service...</option>
-                  {services.map((s) => (
-                    <option key={s} value={s}>{s}</option>
+                  {services.map((service) => (
+                    <option key={service} value={service}>
+                      {service}
+                    </option>
                   ))}
                 </select>
               </div>
 
-              {/* Message */}
               <div>
                 <label className="block text-slate-400 text-[10px] uppercase tracking-[0.3em] mb-2 font-bold">Your Message</label>
                 <textarea
@@ -168,45 +203,50 @@ export default function Contact() {
 
               {submitStatus === 'success' && (
                 <div className="flex items-center gap-2 bg-blue-50 border border-blue-100 rounded-xl px-4 py-3">
-                  <span className="w-5 h-5 bg-blue-600 text-white rounded-full flex items-center justify-center text-[10px] flex-shrink-0">✓</span>
-                  <p className="text-blue-700 text-xs font-bold">Message sent! We'll get back to you within 24 hours.</p>
+                  <span className="w-5 h-5 bg-blue-600 text-white rounded-full flex items-center justify-center text-[10px] flex-shrink-0">OK</span>
+                  <p className="text-blue-700 text-xs font-bold">Message sent! Please confirm the first activation email in {CONTACT_EMAIL} so future inquiries arrive directly in your inbox.</p>
                 </div>
               )}
               {submitStatus === 'error' && (
                 <div className="flex items-center gap-2 bg-red-50 border border-red-100 rounded-xl px-4 py-3">
-                  <p className="text-red-600 text-xs font-bold">Something went wrong. Please try again or email us directly.</p>
+                  <p className="text-red-600 text-xs font-bold">Something went wrong. Please try again or email us directly at {CONTACT_EMAIL}.</p>
                 </div>
               )}
             </form>
           </div>
 
-          {/* Info panel */}
           <div ref={infoRef} className="md:col-span-2 flex flex-col gap-5">
-
-            {/* Blue contact card */}
             <div className="bg-blue-600 p-8 rounded-2xl flex-1">
               <h3 className="text-white font-black text-xs uppercase tracking-[0.3em] mb-8">Contact Info</h3>
               <div className="space-y-6">
                 {[
-                  { icon: Mail, label: 'Email', value: 'hello@codecraft.ph' },
-                  { icon: Phone, label: 'Phone / Viber', value: '+63 912 345 6789' },
+                  { icon: Mail, label: 'Email', value: CONTACT_EMAIL, href: `mailto:${CONTACT_EMAIL}` },
+                  { icon: Phone, label: 'Phone / Viber', value: CONTACT_PHONE, href: `tel:${CONTACT_PHONE}` },
                   { icon: MapPin, label: 'Location', value: 'Tanauan City, Batangas, PH' },
-                  { icon: Clock, label: 'Business Hours', value: 'Mon–Sat, 9 AM – 6 PM' },
-                ].map(({ icon: Icon, label, value }) => (
-                  <div key={label} className="flex items-start gap-4 group cursor-default">
+                  { icon: Clock, label: 'Business Hours', value: 'Mon-Sat, 9 AM - 6 PM' },
+                ].map(({ icon: Icon, label, value, href }) => (
+                  <div key={label} className="flex items-start gap-4 group">
                     <div className="w-9 h-9 bg-white/10 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-white transition-colors duration-300">
                       <Icon className="w-4 h-4 text-white group-hover:text-blue-600 transition-colors duration-300" />
                     </div>
                     <div>
                       <p className="text-blue-200 text-[10px] uppercase tracking-[0.3em] font-bold mb-0.5">{label}</p>
-                      <p className="text-white text-sm font-semibold leading-snug">{value}</p>
+                      {href ? (
+                        <a
+                          href={href}
+                          className="text-white text-sm font-semibold leading-snug hover:text-blue-100 transition-colors break-all"
+                        >
+                          {value}
+                        </a>
+                      ) : (
+                        <p className="text-white text-sm font-semibold leading-snug">{value}</p>
+                      )}
                     </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Response time card */}
             <div className="bg-white border border-slate-100 p-6 rounded-2xl shadow-sm">
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />

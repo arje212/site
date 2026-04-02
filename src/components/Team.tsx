@@ -8,6 +8,7 @@ import frankImg from '../assets/frank.png';
 // Use melecio.jpg (graduation photo = 356316... file)
 import melecioImg from '../assets/melecio.jpg';
 import claireImg from '../assets/claire.jpg';
+import ivanImg from '../assets/ivan.jpg';
 
 interface TeamMember {
   id: string;
@@ -32,7 +33,7 @@ const teamMembers: TeamMember[] = [
     image_url: melecioImg,
     skills: ['Python', 'JavaScript', 'C++', 'C Programming', 'React.js', 'Node.js', 'Django', 'Robotics'],
     linkedin_url: '#',
-    github_url: '#',
+    github_url: 'https://github.com/arje212',
     portfolio_url: 'https://engrmelecio.netlify.app/',
     location: 'Tanauan City, Batangas',
     specialties: ['Full-Stack Development', 'Robotics & Automation', 'System Architecture'],
@@ -52,14 +53,14 @@ const teamMembers: TeamMember[] = [
   {
     id: '3',
     name: 'Ryan Joshua Navarro',
-    role: 'Safety Officer',
-    bio: 'Ensures project compliance, client protection, and operational safety across all CodeCraft engagements. Also serves as the team\'s financial adviser and first-line troubleshooter.',
+    role: 'Marketing Specialist',
+    bio: 'A results-driven professional with strong expertise in client service, sales, and customer support. Skilled in managing client relationships, handling accounts, and delivering effective solutions to meet business goals. Brings experience in inside sales, account management, and customer engagement, ensuring smooth communication and high client satisfaction across all projects.',
     image_url: ryanImg,
-    skills: ['Safety Protocols', 'Financial Advising', 'Support', 'Troubleshooting', 'Training'],
+    skills: ['Client Service Coordinator', 'Customer Support Agent', 'Account Executive', 'Inside Sales Representative',],
     linkedin_url: '#',
     github_url: '#',
-    location: 'Tanauan City, Batangas',
-    specialties: ['Risk Management', 'Client Relations', 'Operational Support'],
+    location: 'Malvar, Batangas',
+    specialties: ['Client Relations', 'Operational Support'],
   },
   {
     id: '4',
@@ -72,6 +73,22 @@ const teamMembers: TeamMember[] = [
     github_url: '#',
     location: 'Tanauan City, Batangas',
     specialties: ['Digital Marketing', 'Brand Strategy', 'Customer Relations'],
+  },
+  {
+    id: '5',
+    name: 'Ivan Jethro Mercado',
+    role: 'Data & Research Specialist',
+    bio: 'A detail-oriented research professional with strong expertise in thesis writing, data analysis, and statistical interpretation. Experienced in guiding students and clients through the research process—from conceptualization to final output—while ensuring accuracy, clarity, and data-driven insights in every project.',
+    image_url: ivanImg,
+    skills: ['Thesis/Research Writing', 'Thesis Consultant', 'Data Interpretation', 'Statistics'],
+    linkedin_url: '#',
+    github_url: '#',
+    location: 'Tanauan City, Batangas',
+    specialties: ['Research Writing',
+  'Data Interpretation',
+  'Statistical Analysis',
+  'Thesis Consultation',
+  'Academic Research Support'],
   },
 ];
 
@@ -151,14 +168,6 @@ function TeamCard({ member, delay, onClick }: { member: TeamMember; delay: numbe
         />
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-        {/* View details hint */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500">
-          <div className="flex items-center justify-center gap-2 bg-white/90 backdrop-blur-sm rounded-lg py-2.5 px-4">
-            <span className="text-blue-600 text-xs font-black uppercase tracking-wider">View Profile</span>
-            <ChevronRight className="w-3.5 h-3.5 text-blue-600" />
-          </div>
-        </div>
       </div>
 
       {/* Info */}
@@ -180,6 +189,13 @@ function TeamCard({ member, delay, onClick }: { member: TeamMember; delay: numbe
               +{member.skills.length - 3}
             </span>
           )}
+        </div>
+
+        <div className="mt-4 pt-4 border-t border-slate-100">
+          <div className="inline-flex items-center gap-2 rounded-lg bg-blue-50 px-3 py-2 text-blue-600 transition-colors duration-300 group-hover:bg-blue-600 group-hover:text-white">
+            <span className="text-[11px] font-black uppercase tracking-[0.18em]">View Profile</span>
+            <ChevronRight className="w-3.5 h-3.5" />
+          </div>
         </div>
       </div>
     </div>

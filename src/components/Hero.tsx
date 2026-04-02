@@ -38,7 +38,7 @@ export default function Hero() {
             <div className="flex items-center gap-3 mb-6">
               <div className="h-px w-10 bg-blue-500" />
               <span className="text-blue-500 text-xs font-black uppercase tracking-[0.4em]">
-                Computer Engineers
+                Engineers
               </span>
             </div>
 
@@ -49,7 +49,7 @@ export default function Hero() {
             </h1>
 
             <p className="text-slate-400 text-base max-w-md mb-10 leading-relaxed">
-              A team of elite Computer Engineers crafting innovative websites,
+              A team of elite Engineers crafting innovative websites,
               web applications, and IT solutions that drive business growth.
             </p>
 
@@ -74,7 +74,7 @@ export default function Hero() {
               {[
                 { number: '50+', label: 'Projects' },
                 { number: '30+', label: 'Clients' },
-                { number: '6', label: 'Members' },
+                { number: '5', label: 'Members' },
                 { number: '5+', label: 'Years' },
               ].map((stat, i) => (
                 <div key={i} className="text-center">
